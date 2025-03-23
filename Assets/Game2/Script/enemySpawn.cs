@@ -24,7 +24,7 @@ public class enemySpawn : MonoBehaviour
         cur = maxcount;
         //spawn();
         //InvokeRepeating("spawn", 2f, 1f);
-        StartCoroutine("spawn");
+        StartCoroutine(spawn());
         myrigidbody = GetComponent<Rigidbody2D>();
     }
 
@@ -44,8 +44,6 @@ public class enemySpawn : MonoBehaviour
 
     private IEnumerator spawn()
     {
-        yield return new WaitForSeconds(1.5f);
-
         while (true)
         {
             float RandomX = Random.Range(-2.9f, 2.9f);

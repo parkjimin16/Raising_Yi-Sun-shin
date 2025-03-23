@@ -60,14 +60,14 @@ public class ButtonEvent : MonoBehaviour
             {
                 for (int i = 0; i < chc; i++)
                 {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
+                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
                 }
             }
             else
             {
                 for (int i = 0; i < chc; i++)
                 {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
+                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
                 }
             }
         }
@@ -89,14 +89,14 @@ public class ButtonEvent : MonoBehaviour
             {
                 for (int i = 0; i < chc; i++)
                 {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
+                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
                 }
             }
             else
             {
                 for (int i = 0; i < chc; i++)
                 {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
+                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
                 }
             }
         }
@@ -118,14 +118,14 @@ public class ButtonEvent : MonoBehaviour
             {
                 for (int i = 0; i < chc; i++)
                 {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
+                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
                 }
             }
             else
             {
                 for (int i = 0; i < chc; i++)
                 {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
+                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
                 }
             }
         }
