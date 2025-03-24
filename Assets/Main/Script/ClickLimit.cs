@@ -14,7 +14,7 @@ public class ClickLimit : MonoBehaviour
     private float timeLimit;
 
     private int clickNum = 5;
-
+    private int clickMax;
 
 
     public int ClickNum
@@ -30,7 +30,6 @@ public class ClickLimit : MonoBehaviour
         get => spawnTime;
     }
 
-    private int clickMax;
     public int ClickMax
     {
         set => clickMax = Mathf.Max(0, value);

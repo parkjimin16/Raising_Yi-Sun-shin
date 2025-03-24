@@ -67,7 +67,7 @@ public class move : MonoBehaviour
             sprite.flipX = nextMove == 1;
     }
 
-    void Think()
+    private void Think()
     {
         int rax = Random.Range(0, 100);
         if (rax < 50)
