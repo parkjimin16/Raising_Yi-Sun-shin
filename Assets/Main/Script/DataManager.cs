@@ -17,14 +17,20 @@ public class chData
 
 public class DataManager : MonoBehaviour
 {
-    public GameObject itemPrefabs;
+    /*public GameObject itemPrefabs;
     public MergeItem mg;
     public Merge mg1;
     public chbool cb;
+    public chData data = new chData();*/
+
+    public GameObject itemPrefab;
+    public MergeItem mergeItem;
+    public Merge merge;
+    public chbool chBool;
     public chData data = new chData();
 
 
-    private void Start()
+    /*private void Start()
     {
         var objs = FindObjectsOfType<DataManager>();
         if (objs.Length == 1)
@@ -36,10 +42,18 @@ public class DataManager : MonoBehaviour
             Destroy(gameObject);
         }
         mg = mg.GetComponent<MergeItem>();
+    }*/
+    private void Awake()
+    {
+        if (FindObjectsOfType<DataManager>().Length > 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        DontDestroyOnLoad(gameObject);
     }
-
     // 불러오기
-    public void LoadGameData()
+    /*public void LoadGameData()
     {
         int chc = GameObject.Find("chp").transform.childCount;
         string filePath = Path.Combine(Application.persistentDataPath, "chData.json");
@@ -65,11 +79,35 @@ public class DataManager : MonoBehaviour
 
             print("불러오기 완료");
         }
+    }*/
+    public void LoadGameData()
+    {
+        string filePath = Path.Combine(Application.persistentDataPath, "chData.json");
+        Debug.Log(filePath);
+        if (File.Exists(filePath))
+        {
+            string json = File.ReadAllText(filePath);
+            data = JsonUtility.FromJson<chData>(json);
+
+            var mergeComponent = GameObject.Find("ItemData").GetComponent<Merge>();
+            foreach (int itemNum in data.itemNum2)
+            {
+                mergeComponent.itemdata[itemNum].spawncheck = true;
+            }
+
+            for (int i = 0; i < data.itemNum1.Count; i++)
+            {
+                chBool.save = true;
+                merge.objPosition1 = data.Pos1[i];
+                merge.itemCreate(data.itemNum1[i]);
+            }
+
+            Debug.Log("Load complete");
+        }
     }
 
-
     // 저장하기
-    public void SaveGameData()
+    /*public void SaveGameData()
     {
         int chc = GameObject.Find("chp").transform.childCount;
 
@@ -107,5 +145,36 @@ public class DataManager : MonoBehaviour
 
         // 올바르게 저장됐는지 확인 (자유롭게 변형)
         print("저장 완료");
+    }*/
+    public void SaveGameData()
+    {
+        Transform chParent = GameObject.Find("chp").transform;
+        int childCount = chParent.childCount;
+
+        data.itemNum1.Clear();
+        data.itemNum2.Clear();
+        data.Pos1.Clear();
+
+        for (int i = 0; i < childCount; i++)
+        {
+            var mItem = chParent.GetChild(i).GetComponent<MergeItem>();
+            data.itemNum1.Add(mItem.iN);
+            data.Pos1.Add(chParent.GetChild(i).position);
+        }
+
+        var mergeComponent = GameObject.Find("ItemData").GetComponent<Merge>();
+        for (int i = 0; i < mergeComponent.itemdata.Count; i++)
+        {
+            if (mergeComponent.itemdata[i].spawncheck)
+                data.itemNum2.Add(mergeComponent.itemdata[i].itemNum);
+        }
+
+        data.chCount = childCount;
+        data.save = true;
+
+        string json = JsonUtility.ToJson(data, true);
+        string filePath = Path.Combine(Application.persistentDataPath, "chData.json");
+        File.WriteAllText(filePath, json);
+        Debug.Log("Save complete");
     }
 }

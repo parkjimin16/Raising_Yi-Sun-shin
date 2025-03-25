@@ -19695,10 +19695,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da9ae31d2e3262448933007529c0af0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefabs: {fileID: 181130840950445205, guid: 6d7f690a8680e534382b4015f98bbaf4, type: 3}
-  mg: {fileID: 3236291397540450551, guid: 6d7f690a8680e534382b4015f98bbaf4, type: 3}
-  mg1: {fileID: 1016972}
-  cb: {fileID: -9065805565903695533, guid: 6d7f690a8680e534382b4015f98bbaf4, type: 3}
+  itemPrefab: {fileID: 181130840950445205, guid: 6d7f690a8680e534382b4015f98bbaf4, type: 3}
+  mergeItem: {fileID: 3236291397540450551, guid: 6d7f690a8680e534382b4015f98bbaf4, type: 3}
+  merge: {fileID: 1016972}
+  chBool: {fileID: -9065805565903695533, guid: 6d7f690a8680e534382b4015f98bbaf4, type: 3}
   data:
     itemNum1: 
     Pos1: []
