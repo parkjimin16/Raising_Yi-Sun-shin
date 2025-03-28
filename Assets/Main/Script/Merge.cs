@@ -6,6 +6,7 @@ using UnityEngine;
 //using static UnityEditor.Progress;
 using System.IO;
 using System.Linq;
+using System.Data;
 
 [System.Serializable]
 public class Item
@@ -39,7 +40,7 @@ public class Merge : MonoBehaviour
 
     private void Awake()
     {
-        var objs = FindObjectsOfType<DataManager>();
+        /*var objs = FindObjectsOfType<DataManager>();
         if (objs.Length == 1)
         {
             DontDestroyOnLoad(gameObject);
@@ -58,6 +59,24 @@ public class Merge : MonoBehaviour
                 GameObject.Find("ItemData").transform.GetComponent<Merge>().itemdata[data.itemNum2[q]].spawncheck = true;
             }
             Debug.Log("불러오기 완료.");
+        }*/
+        if (FindObjectsOfType<Merge>().Length > 1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        DontDestroyOnLoad(gameObject);
+
+        string filePath = Path.Combine(Application.dataPath, "chData.json");
+        if (File.Exists(filePath))
+        {
+            string json = File.ReadAllText(filePath);
+            data = JsonUtility.FromJson<chData>(json);
+            foreach (int itemIndex in data.itemNum2)
+            {
+                itemdata[itemIndex].spawncheck = true;
+            }
+            Debug.Log("Merge data loaded.");
         }
     }
 
@@ -83,7 +102,7 @@ public class Merge : MonoBehaviour
         int childMax = PlayerPrefs.GetInt("ChildMax");
         int UpCh = PlayerPrefs.GetInt("Count");
 
-        if (num == UpCh && GameObject.Find("chp").transform.childCount < childMax && cb.save == false)
+        /*if (num == UpCh && GameObject.Find("chp").transform.childCount < childMax && cb.save == false)
         {
             spawnbgm.Play();
 
@@ -130,10 +149,53 @@ public class Merge : MonoBehaviour
             panelbgm.Play();
             Instantiate(itemdata[num].panel, new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
             itemdata[num].spawncheck = true;
+        }*/
+        if (num == UpCh && GameObject.Find("chp").transform.childCount < childMax && !cb.save)
+        {
+            spawnbgm.Play();
+            Vector3 randomPos = new Vector3(Random.Range(-2.2f, 2.2f), Random.Range(-3.5f, 2f), 0);
+            GameObject go = Instantiate(itemPrefabs, randomPos, Quaternion.identity);
+            go.GetComponent<MergeItem>().InitItem(itemdata[num]);
+            Invoke(nameof(UpdateStats), 0.2f);
+        }
+        else if (num < ListMax && num != UpCh && !cb.save)
+        {
+            spawnbgm.Play();
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+            GameObject go = Instantiate(itemPrefabs, mousePos, Quaternion.identity);
+            go.GetComponent<MergeItem>().InitItem(itemdata[num]);
+            Invoke(nameof(UpdateStats), 0.2f);
+        }
+        else if (cb.save)
+        {
+            GameObject go = Instantiate(itemPrefabs, objPosition1, Quaternion.identity);
+            go.GetComponent<MergeItem>().InitItem(itemdata[num]);
+            cb.save = false;
+        }
+
+        if (!itemdata[num].spawncheck)
+        {
+            panelbgm.Play();
+            Instantiate(itemdata[num].panel, Vector3.zero, Quaternion.identity, GameObject.Find("Canvas").transform);
+            itemdata[num].spawncheck = true;
+        }
+    }
+    private void UpdateStats()
+    {
+        GameObject chp = GameObject.Find("chp");
+        if (chp != null)
+        {
+            var chParent = chp.GetComponent<chparent>();
+            if (chParent != null)
+            {
+                chParent.attack();
+                chParent.ch_hp();
+                chParent.ch_gold();
+            }
         }
     }
 
-    void attacko()
+    /*void attacko()
     {
         GameObject.Find("chp").GetComponent<chparent>().attack();
     }
@@ -146,5 +208,5 @@ public class Merge : MonoBehaviour
     void goldo()
     {
         GameObject.Find("chp").GetComponent<chparent>().ch_gold();
-    }
+    }*/
 }

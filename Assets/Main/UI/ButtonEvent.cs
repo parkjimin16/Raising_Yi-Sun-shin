@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ButtonEvent : MonoBehaviour
 {
-    public bool game1, game2, game3, etc;
+    public bool game1, game2, game3, main;
 
     private void Update()
     {
@@ -42,6 +42,7 @@ public class ButtonEvent : MonoBehaviour
     {
         int gold = PlayerPrefs.GetInt("Gold");
         int bossticket = PlayerPrefs.GetInt("BossTicket");
+        int x = SceneManager.GetActiveScene().buildIndex;
 
         if (gold >= 100 && game1 == true)
         {
@@ -49,26 +50,15 @@ public class ButtonEvent : MonoBehaviour
 
             PlayerPrefs.SetInt("Gold", gold);
 
-            int x = SceneManager.GetActiveScene().buildIndex;
             int chc = GameObject.Find("chp").transform.childCount;
 
             SceneManager.LoadScene(sceneName);
 
             Time.timeScale = 1f;
 
-            if (x == 2 || x == 3 || x == 4)
+            for (int i = 0; i < chc; i++)
             {
-                for (int i = 0; i < chc; i++)
-                {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < chc; i++)
-                {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
-                }
+                GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
             }
         }
 
@@ -78,26 +68,16 @@ public class ButtonEvent : MonoBehaviour
 
             PlayerPrefs.SetInt("Gold", gold);
 
-            int x = SceneManager.GetActiveScene().buildIndex;
+            //int x = SceneManager.GetActiveScene().buildIndex;
             int chc = GameObject.Find("chp").transform.childCount;
 
             SceneManager.LoadScene(sceneName);
 
             Time.timeScale = 1f;
 
-            if (x == 2 || x == 3 || x == 4)
+            for (int i = 0; i < chc; i++)
             {
-                for (int i = 0; i < chc; i++)
-                {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < chc; i++)
-                {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
-                }
+                GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
             }
         }
 
@@ -107,51 +87,31 @@ public class ButtonEvent : MonoBehaviour
 
             PlayerPrefs.SetInt("BossTicket", bossticket);
 
-            int x = SceneManager.GetActiveScene().buildIndex;
+            //int x = SceneManager.GetActiveScene().buildIndex;
             int chc = GameObject.Find("chp").transform.childCount;
 
             SceneManager.LoadScene(sceneName);
 
             Time.timeScale = 1f;
 
-            if (x == 2 || x == 3 || x == 4)
+            for (int i = 0; i < chc; i++)
             {
-                for (int i = 0; i < chc; i++)
-                {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < chc; i++)
-                {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
-                }
+                GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
             }
         }
 
-        if (etc == true)
+        if (main == true)
         {
-            int x = SceneManager.GetActiveScene().buildIndex;
+            //int x = SceneManager.GetActiveScene().buildIndex;
             int chc = GameObject.Find("chp").transform.childCount;
 
             SceneManager.LoadScene(sceneName);
 
             Time.timeScale = 1f;
 
-            if (x == 2 || x == 3 || x == 4)
+            for (int i = 0; i < chc; i++)
             {
-                for (int i = 0; i < chc; i++)
-                {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(false);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < chc; i++)
-                {
-                    GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
-                }
+                GameObject.Find("chp").transform.GetChild(i).gameObject.SetActive(true);
             }
 
         }

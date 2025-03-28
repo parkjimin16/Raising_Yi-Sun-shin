@@ -8,109 +8,98 @@ using UnityEngine.SceneManagement;
 
 public class MergeItem : MonoBehaviour
 {
-    SpriteRenderer sr;
-    Item item;
-    bool isSelect;
-    GameObject contactItem;
-    Animator animator;
-    public GameObject chpa;
-    private int chgold;
-    private Vector3 myPos;
+    private SpriteRenderer spriteRenderer;
+    private Item item;
+    private bool isSelected;
+    private GameObject contactItem;
+    private Animator animator;
+    private Vector3 initialPosition;
+    private int baseGold;
 
     public int iN;
     public bool SC;
-    public GameObject GoldImage;
+    public GameObject goldImage;
     public float a1, a2, a3;
-
     private int gold;
+    private float getGoldTime = 5.0f;
 
     public int Gold
     {
-        set => gold = Mathf.Max(0, value);
         get => gold;
+        set => gold = Mathf.Max(0, value);
     }
-
-    private float getGoldTime = 5.0f;
 
     public float GetGoldTime
     {
-        set => getGoldTime = Mathf.Max(0, value);
         get => getGoldTime;
+        set => getGoldTime = Mathf.Max(0, value);
     }
 
     private void Awake()
     {
-        //PlayerPrefs.DeleteAll();
-        
         animator = GetComponent<Animator>();
-        chpa = GameObject.FindGameObjectWithTag("chp");
-        gameObject.transform.parent = chpa.transform;
-        myPos = gameObject.transform.position;
-
-        //StartCoroutine("test");
-
+        GameObject chp = GameObject.FindGameObjectWithTag("chp");
+        if (chp != null)
+            transform.SetParent(chp.transform);
+        initialPosition = transform.position;
     }
+
     private void OnEnable()
     {
-        StartCoroutine("test");
+        StartCoroutine(GoldCoroutine());
     }
-    private IEnumerator test()
+
+    private IEnumerator GoldCoroutine()
     {
         while (true)
         {
-            float getGoldTime = PlayerPrefs.GetFloat("GetGoldTime");
-
-            int x = SceneManager.GetActiveScene().buildIndex;
-            if (x == 1)
+            float interval = PlayerPrefs.GetFloat("GetGoldTime");
+            int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            if (sceneIndex == 1)
             {
                 Gold = PlayerPrefs.GetInt("Gold");
-                Vector3 pos = new Vector3(myPos.x, myPos.y + 0.35f, myPos.z);
-                GameObject goldimage = Instantiate(GoldImage, pos, Quaternion.identity);
-                Destroy(goldimage, 0.125f);
+                Vector3 pos = new Vector3(initialPosition.x, initialPosition.y + 0.35f, initialPosition.z);
+                GameObject goldImgInstance = Instantiate(goldImage, pos, Quaternion.identity);
+                Destroy(goldImgInstance, 0.125f);
 
-                int upgold = PlayerPrefs.GetInt("UpGold");
-
-                Gold += chgold * upgold;
+                int upGold = PlayerPrefs.GetInt("UpGold");
+                Gold += baseGold * upGold;
                 PlayerPrefs.SetInt("Gold", gold);
-
-                Debug.Log(getGoldTime);
+                Debug.Log(interval);
             }
             else
             {
                 Gold = PlayerPrefs.GetInt("Gold");
-
-                int upgold = PlayerPrefs.GetInt("UpGold");
-
-                Gold += chgold * upgold;
+                int upGold = PlayerPrefs.GetInt("UpGold");
+                Gold += baseGold * upGold;
                 PlayerPrefs.SetInt("Gold", gold);
             }
-            yield return new WaitForSeconds(getGoldTime);
+            yield return new WaitForSeconds(interval);
         }
     }
 
-    public void InitItem(Item i)
+    public void InitItem(Item newItem)
     {
-        item = i;
-        sr = GetComponent<SpriteRenderer>();
-        sr.sprite = item.itemimg;
-        chgold = item.itemgold;
+        item = newItem;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = item.itemimg;
+        baseGold = item.itemgold;
     }
 
     private void OnMouseDown()
     {
-        isSelect = true;
+        isSelected = true;
     }
 
     private void OnMouseDrag()
     {
-        Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
-        Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        transform.position = objPosition;
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+        transform.position = mousePos;
     }
 
     private void OnMouseUp()
     {
-        isSelect = false;
+        isSelected = false;
         if (contactItem != null)
         {
             Destroy(contactItem);
@@ -121,23 +110,18 @@ public class MergeItem : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (isSelect && item.itemNum == collision.GetComponent<MergeItem>().item.itemNum)
+        var otherMergeItem = collision.GetComponent<MergeItem>();
+        if (isSelected && otherMergeItem != null && item.itemNum == otherMergeItem.item.itemNum)
         {
-            if (contactItem != null)
-            {
-                contactItem = null;
-            }
-
             contactItem = collision.gameObject;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (item.itemNum == collision.GetComponent<MergeItem>().item.itemNum)
-        {
+        var otherMergeItem = collision.GetComponent<MergeItem>();
+        if (otherMergeItem != null && item.itemNum == otherMergeItem.item.itemNum)
             contactItem = null;
-        }
     }
 
     private void Update()
@@ -145,12 +129,9 @@ public class MergeItem : MonoBehaviour
         iN = item.itemNum;
         SC = item.spawncheck;
         animator.SetInteger("chnum", item.itemNum);
-
         a1 = item.attack;
         a2 = item.hp;
         a3 = item.itemgold;
-        //Debug.Log(iN);
-
-        myPos = gameObject.transform.position;
+        initialPosition = transform.position;
     }
 }

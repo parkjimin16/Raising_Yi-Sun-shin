@@ -689,7 +689,7 @@ MonoBehaviour:
   game1: 0
   game2: 0
   game3: 0
-  etc: 1
+  main: 1
 --- !u!114 &179998237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1281,7 +1281,7 @@ MonoBehaviour:
   game1: 0
   game2: 0
   game3: 0
-  etc: 1
+  main: 1
 --- !u!114 &342595548
 MonoBehaviour:
   m_ObjectHideFlags: 0
