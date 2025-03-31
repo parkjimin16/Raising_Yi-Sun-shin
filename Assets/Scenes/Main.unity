@@ -4912,7 +4912,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 290620812}
   image: {fileID: 1087902118}
-  mg: {fileID: 1016972}
+  merge: {fileID: 1016972}
 --- !u!114 &290620816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10195,7 +10195,7 @@ MonoBehaviour:
   game1: 0
   game2: 0
   game3: 1
-  etc: 0
+  main: 0
 --- !u!114 &623698321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25596,7 +25596,7 @@ MonoBehaviour:
   game1: 0
   game2: 1
   game3: 0
-  etc: 0
+  main: 0
 --- !u!114 &1551510374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34432,7 +34432,7 @@ MonoBehaviour:
   game1: 1
   game2: 0
   game3: 0
-  etc: 0
+  main: 0
 --- !u!114 &2050661358
 MonoBehaviour:
   m_ObjectHideFlags: 0

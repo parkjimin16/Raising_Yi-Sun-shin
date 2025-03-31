@@ -51,7 +51,7 @@ public class enemydata : MonoBehaviour
 
         if (hp < 0)
         {
-            Destroy(gameObject);
+            ObjectPoolManager.instance.ReturnToPool(gameObject);
             enemyspawn.GetComponent<enemySpawn>().cur -= 1;
             enemyspawn.GetComponent<enemySpawn>().dieenemy += 1;
             curcoin = PlayerPrefs.GetInt("GameGold");
@@ -85,18 +85,6 @@ public class enemydata : MonoBehaviour
             }
         }
         shortD();
-        //die();
-        
-        /*else if (Vector2.Distance(gameObject.transform.position, Player.transform.position) < 4f && Vector2.Distance(gameObject.transform.position, Player.transform.position) >=1f)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, Player.transform.position, Time.deltaTime * speed);
-        }*/
-
-        /*else if (Vector2.Distance(gameObject.transform.position, castle.transform.position) < 3.8f)
-        {
-            attack();
-        }*/
-        //Debug.Log(Vector2.Distance(gameObject.transform.position, Player.transform.position));
 
     }
     void die()
@@ -148,10 +136,6 @@ public class enemydata : MonoBehaviour
                     StartCoroutine(GameObject.FindGameObjectWithTag("player").GetComponent<Spawn>().HitColorAnimation());
                 }
                 
-                //StopCoroutine(GameObject.FindGameObjectWithTag("player").GetComponent<Spawn>().HitColorAnimation());
-
-
-                //Debug.Log(Player.GetComponent<Spawn>().hp);
             }
             if (collider.tag == "castle")
             {

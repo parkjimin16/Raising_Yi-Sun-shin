@@ -28,41 +28,27 @@ public class enemySpawn : MonoBehaviour
         myrigidbody = GetComponent<Rigidbody2D>();
     }
 
-    void spawn2()
-    {
-        float RandomX = Random.Range(-2.9f, 2.9f);
-        Vector3 enemypos = new Vector3(RandomX, 6.6f, 1f);
-        GameObject go = Instantiate(enemyPrefabs, enemypos, Quaternion.identity);
-        max += 1;
-
-        if (max %3 == 0)
-        {
-            enemyat.GetComponent<enemydata>().hp += 1;
-            enemyat.GetComponent<enemydata>().atk += 1;
-        }
-    }
-
     private IEnumerator spawn()
     {
         while (true)
         {
             float RandomX = Random.Range(-2.9f, 2.9f);
             Vector3 enemypos = new Vector3(RandomX, 6.6f, 1f);
-            GameObject go = Instantiate(enemyPrefabs, enemypos, Quaternion.identity);
+
+            GameObject go = ObjectPoolManager.instance.GetPooledEnemy();
+            go.transform.position = enemypos;
+
             max += 1;
 
             if (max % 5 == 0)
             {
                 enemyat.GetComponent<enemydata>().hp += 0.3f;
-                //enemyat.GetComponent<enemydata>().atk += 1;
             }
-            Debug.Log(spawntime);
             spawntime = Random.Range(0.5f, 1.6f);
-
             yield return new WaitForSeconds(spawntime);
 
-           // if (spawntime > 0.5f)
-              //  spawntime -= 0.2f;
+            // if (spawntime > 0.5f)
+            //  spawntime -= 0.2f;
         }
 
     }
