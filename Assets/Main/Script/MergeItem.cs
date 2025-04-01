@@ -38,9 +38,6 @@ public class MergeItem : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        GameObject chp = GameObject.FindGameObjectWithTag("chp");
-        if (chp != null)
-            transform.SetParent(chp.transform);
         initialPosition = transform.position;
     }
 
@@ -84,6 +81,15 @@ public class MergeItem : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = item.itemimg;
         baseGold = item.itemgold;
+
+        SetParentToChp();
+    }
+
+    private void SetParentToChp()
+    {
+        GameObject chp = GameObject.FindGameObjectWithTag("chp");
+        if (chp != null)
+            transform.SetParent(chp.transform);
     }
 
     private void OnMouseDown()
@@ -102,8 +108,8 @@ public class MergeItem : MonoBehaviour
         isSelected = false;
         if (contactItem != null)
         {
-            Destroy(contactItem);
-            Destroy(gameObject);
+            MergeItemPoolManager.instance.ReturnToPool(contactItem);
+            MergeItemPoolManager.instance.ReturnToPool(gameObject);
             GameObject.Find("ItemData").GetComponent<Merge>().itemCreate(item.itemNum + 1);
         }
     }

@@ -23,11 +23,15 @@ public class ClickLimit : MonoBehaviour
         int resetCount = PlayerPrefs.GetInt("UpCh");
         PlayerPrefs.SetInt("Count", resetCount);
 
+        clickNum = PlayerPrefs.GetInt("ClickNum", 5);
+    }
+
+    private void OnEnable()
+    {
         if (merge == null)
             merge = GameObject.Find("ItemData").GetComponent<Merge>();
 
         btn.onClick.AddListener(() => merge.itemCreate(upCh));
-        clickNum = PlayerPrefs.GetInt("ClickNum", 5);
     }
 
     private void Update()

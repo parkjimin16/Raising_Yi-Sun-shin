@@ -15,6 +15,11 @@ public class ObjectPoolManager : MonoBehaviour
     {
         instance = this;
 
+        InitializePool();
+    }
+
+    private void InitializePool()
+    {
         for (int i = 0; i < poolSize; i++)
         {
             GameObject obj = Instantiate(enemyPrefab);

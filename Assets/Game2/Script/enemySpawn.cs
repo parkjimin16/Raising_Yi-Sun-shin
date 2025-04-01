@@ -44,12 +44,8 @@ public class enemySpawn : MonoBehaviour
             {
                 enemyat.GetComponent<enemydata>().hp += 0.3f;
             }
-            spawntime = Random.Range(0.5f, 1.6f);
+            spawntime = Random.Range(1f, 1.6f);
             yield return new WaitForSeconds(spawntime);
-
-            // if (spawntime > 0.5f)
-            //  spawntime -= 0.2f;
         }
-
     }
 }

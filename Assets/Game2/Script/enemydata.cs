@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static UnityEngine.GraphicsBuffer;
 
 public class enemydata : MonoBehaviour
 {
     public float hp;
     public int atk;
-    public GameObject Player;
-    public GameObject castle;
     public GameObject enemyspawn;
     public List<GameObject> FoundObjects;
     public float shortDis;
@@ -22,7 +21,8 @@ public class enemydata : MonoBehaviour
     public int curcoin;
 
     public AudioSource shootbgm;
-
+    private GameObject target;
+    private GameObject castle;
     // Start is called before the first frame update
     void Start()
     {
@@ -49,16 +49,9 @@ public class enemydata : MonoBehaviour
             shootbgm.mute = true;
         }
 
-        if (hp < 0)
-        {
-            ObjectPoolManager.instance.ReturnToPool(gameObject);
-            enemyspawn.GetComponent<enemySpawn>().cur -= 1;
-            enemyspawn.GetComponent<enemySpawn>().dieenemy += 1;
-            curcoin = PlayerPrefs.GetInt("GameGold");
-            curcoin += 1;
-            PlayerPrefs.SetInt("GameGold", curcoin);
-        }
-        if (Player == false)
+        CheckEnemyHealth();
+
+        /*if (Player == false)
         {
             if (Vector2.Distance(gameObject.transform.position, castle.transform.position) < 13f && Vector2.Distance(gameObject.transform.position, castle.transform.position) >= 2.0f)
             {
@@ -83,9 +76,10 @@ public class enemydata : MonoBehaviour
             {
                 animator.SetBool("isattack", true);
             }
-        }
-        shortD();
-
+        }*/
+        //shortD();
+        Movement();
+        FindNearestPlayer();
     }
     void die()
     {
@@ -97,7 +91,7 @@ public class enemydata : MonoBehaviour
             //hp = 5;
         }
     }
-    void shortD()
+    /*void shortD()
     {
         try
         {
@@ -119,7 +113,7 @@ public class enemydata : MonoBehaviour
         {
             Debug.Log(ex);
         }
-    }
+    }*/
     void attack()
     {
         shootbgm.Play();
@@ -155,5 +149,66 @@ public class enemydata : MonoBehaviour
         sprite.color = Color.red;
         yield return new WaitForSeconds(1f);
         sprite.color = Color.white;
+    }
+
+    private void CheckEnemyHealth()
+    {
+        if (hp <= 0)
+        {
+            ObjectPoolManager.instance.ReturnToPool(gameObject);
+            var spawnManager = FindObjectOfType<enemySpawn>();
+            spawnManager.cur -= 1;
+            spawnManager.dieenemy += 1;
+
+            int gameGold = PlayerPrefs.GetInt("GameGold");
+            PlayerPrefs.SetInt("GameGold", gameGold + 1);
+        }
+    }
+    private void FindNearestPlayer()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("player");
+        float shortestDistance = Mathf.Infinity;
+
+        foreach (GameObject player in players)
+        {
+            float distance = Vector3.Distance(transform.position, player.transform.position);
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                target = player;
+            }
+        }
+    }
+    private void Movement()
+    {
+        if (target == null || Vector2.Distance(transform.position, target.transform.position) > 13f)
+            target = castle;
+
+        float distance = Vector2.Distance(transform.position, target.transform.position);
+
+        if(target == castle)
+        {
+            if (distance > 1.8f)
+            {
+                animator.SetBool("isattack", false);
+                transform.position = Vector2.MoveTowards(transform.position, target.transform.position, Time.deltaTime * speed);
+            }
+            else
+            {
+                animator.SetBool("isattack", true);
+            }
+        }
+        else
+        {
+            if (distance > 1f)
+            {
+                animator.SetBool("isattack", false);
+                transform.position = Vector2.MoveTowards(transform.position, target.transform.position, Time.deltaTime * speed);
+            }
+            else
+            {
+                animator.SetBool("isattack", true);
+            }
+        }
     }
 }

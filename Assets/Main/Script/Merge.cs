@@ -40,26 +40,6 @@ public class Merge : MonoBehaviour
 
     private void Awake()
     {
-        /*var objs = FindObjectsOfType<DataManager>();
-        if (objs.Length == 1)
-        {
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        string filePath = Path.Combine(Application.dataPath, "chData.json");
-        if (File.Exists(filePath))
-        {
-            string FromJsonData = File.ReadAllText(filePath);
-            data = JsonUtility.FromJson<chData>(FromJsonData);
-            for (int q = 0; q < data.itemNum2.Count; q++)
-            {
-                GameObject.Find("ItemData").transform.GetComponent<Merge>().itemdata[data.itemNum2[q]].spawncheck = true;
-            }
-            Debug.Log("불러오기 완료.");
-        }*/
         if (FindObjectsOfType<Merge>().Length > 1)
         {
             Destroy(gameObject);
@@ -102,74 +82,26 @@ public class Merge : MonoBehaviour
         int childMax = PlayerPrefs.GetInt("ChildMax");
         int UpCh = PlayerPrefs.GetInt("Count");
 
-        /*if (num == UpCh && GameObject.Find("chp").transform.childCount < childMax && cb.save == false)
+        if ((num == UpCh || num < ListMax) && GameObject.Find("chp").transform.childCount < childMax && !cb.save)
         {
             spawnbgm.Play();
 
-            float RandomX = Random.Range(-2.2f, 2.2f);
-            float RandomY = Random.Range(-3.5f, 2);
+            Vector3 spawnPos = (num == UpCh)
+                ? new Vector3(Random.Range(-2.2f, 2.2f), Random.Range(-3.5f, 2), 0)
+                : Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
 
-            Vector3 RandomPos = new Vector3(RandomX, RandomY, 0);
+            GameObject item = MergeItemPoolManager.instance.GetPooledMergeItem();
+            item.transform.position = spawnPos;
+            item.GetComponent<MergeItem>().InitItem(itemdata[num]);
 
-            GameObject go = Instantiate(itemPrefabs, RandomPos, Quaternion.identity);
-            go.GetComponent<MergeItem>().InitItem(itemdata[num]);
-
-            Invoke("attacko",0.2f);
-            Invoke("hpo", 0.2f);
-            Invoke("goldo", 0.2f);
-        }
-
-        else if (num < ListMax && num != UpCh && cb.save == false)
-        {
-            spawnbgm.Play();
-
-            Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
-            Vector3 objPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-            transform.position = objPosition;
-
-            GameObject go = Instantiate(itemPrefabs, transform.position, Quaternion.identity);
-            go.GetComponent<MergeItem>().InitItem(itemdata[num]);
-
-            Invoke("attacko", 0.2f);
-            Invoke("hpo", 0.2f);
-            Invoke("goldo", 0.2f);
-        }
-
-        if (cb.save == true)
-        {
-            GameObject go = Instantiate(itemPrefabs, objPosition1, Quaternion.identity);
-            go.GetComponent<MergeItem>().InitItem(itemdata[num]);
-            cb.save = false;
-        }
-
-        //itemdata[num].spawncheck = true;
-
-        if (itemdata[num].spawncheck == false)
-        {
-            panelbgm.Play();
-            Instantiate(itemdata[num].panel, new Vector3(0, 0, 0), Quaternion.identity, GameObject.Find("Canvas").transform);
-            itemdata[num].spawncheck = true;
-        }*/
-        if (num == UpCh && GameObject.Find("chp").transform.childCount < childMax && !cb.save)
-        {
-            spawnbgm.Play();
-            Vector3 randomPos = new Vector3(Random.Range(-2.2f, 2.2f), Random.Range(-3.5f, 2f), 0);
-            GameObject go = Instantiate(itemPrefabs, randomPos, Quaternion.identity);
-            go.GetComponent<MergeItem>().InitItem(itemdata[num]);
             Invoke(nameof(UpdateStats), 0.2f);
         }
-        else if (num < ListMax && num != UpCh && !cb.save)
+
+        if (cb.save)
         {
-            spawnbgm.Play();
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-            GameObject go = Instantiate(itemPrefabs, mousePos, Quaternion.identity);
-            go.GetComponent<MergeItem>().InitItem(itemdata[num]);
-            Invoke(nameof(UpdateStats), 0.2f);
-        }
-        else if (cb.save)
-        {
-            GameObject go = Instantiate(itemPrefabs, objPosition1, Quaternion.identity);
-            go.GetComponent<MergeItem>().InitItem(itemdata[num]);
+            GameObject item = MergeItemPoolManager.instance.GetPooledMergeItem();
+            item.transform.position = objPosition1;
+            item.GetComponent<MergeItem>().InitItem(itemdata[num]);
             cb.save = false;
         }
 

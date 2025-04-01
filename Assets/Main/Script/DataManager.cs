@@ -107,6 +107,6 @@ public class DataManager : MonoBehaviour
         string json = JsonUtility.ToJson(data, true);
         string filePath = Path.Combine(Application.persistentDataPath, "chData.json");
         File.WriteAllText(filePath, json);
-        Debug.Log("Save complete");
+        Debug.Log(filePath);
     }
 }
