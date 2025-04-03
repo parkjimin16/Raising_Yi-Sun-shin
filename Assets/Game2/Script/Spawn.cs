@@ -23,6 +23,7 @@ public class Spawn : MonoBehaviour
 
     public float Spawntime;
     public float Spawntime1;
+    private float maxSearchDistance = 13f;
     public void InitItem(Itemimage i)
     {
         item = i;
@@ -43,30 +44,23 @@ public class Spawn : MonoBehaviour
         Spawntime1 = item.cooltime;
         
     }
-    void shortD()
+    private void FindNearestEnemy()
     {
-        try
-        {
-            FoundObjects = new List<GameObject>(GameObject.FindGameObjectsWithTag("enemy"));
-            shortDis = Vector3.Distance(gameObject.transform.position, FoundObjects[0].transform.position);
-            enemy = FoundObjects[0];
-            foreach (GameObject found in FoundObjects)
-            {
-                float Distance = Vector3.Distance(gameObject.transform.position, found.transform.position);
+        List<GameObject> objects = EnemyManager.instance.enemies;
+        float shortestDistance = maxSearchDistance;
+        GameObject nearestEnemy = null;
 
-                if (Distance < shortDis) // 위에서 잡은 기준으로 거리 재기
-                {
-                    enemy = found;
-                    shortDis = Distance;
-                }
+        foreach (GameObject obj in objects)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                nearestEnemy = obj;
             }
         }
-        catch(Exception ex)
-        {
-            Debug.Log(ex);
-        }
+        enemy = nearestEnemy;
     }
-    
     // Update is called once per frame
     void Update()
     {
@@ -85,10 +79,10 @@ public class Spawn : MonoBehaviour
         if (hp <= 0 && gameObject.transform.position.y > -3.65)
         {
             GameObject.FindGameObjectWithTag("enemy").GetComponent<enemydata>().sprite.color = Color.white;
-            Destroy(gameObject);
+            CharacterPoolManager.instance.ReturnCharacterToPool(gameObject);
         }
         animator.SetInteger("chnum", item.itemNum);
-        shortD();
+        FindNearestEnemy();
         if (gameObject.transform.position.y > -3.65)
         {
             animator.SetInteger("WalkSpeed", 0);
@@ -110,22 +104,19 @@ public class Spawn : MonoBehaviour
             animator.SetBool("attack", true);
             //Debug.Log("1");
         }
-        
-        //Debug.Log(Vector2.Distance(gameObject.transform.position, enemy.transform.position));
     }
 
     private void OnMouseUp()
     {
         if(gameObject.transform.position.y < -3.65 && Spawntime >= Spawntime1)
         {
-            GameObject chp = Instantiate(gameObject, chpos1, Quaternion.identity);
+            GameObject chp = CharacterPoolManager.instance.GetPooledCharacter(chpos1);
             chp.gameObject.GetComponent<Spawn>().InitItem(item);
             chp.tag = "player";
             
             Spawntime = 0;
         }
     }
-
 
     public void DirectionEnemy(float target, float baseobj)
     {
@@ -158,17 +149,12 @@ public class Spawn : MonoBehaviour
             {
                 if (collider.tag == "enemy")
                 {
-                    
                     enemy.GetComponent<enemydata>().hp -= item.atk;
                     if(enemy.GetComponent<enemydata>().hp > 0)
                     {
                         StartCoroutine(GameObject.FindGameObjectWithTag("enemy").GetComponent<enemydata>().HitColorAnimation());
                     }
-                    
-                    //StopCoroutine(GameObject.FindGameObjectWithTag("enemy").GetComponent<enemydata>().HitColorAnimation());
-
-
-                    //Debug.Log(enemy.GetComponent<enemydata>().hp);
+                    Debug.Log(enemy.GetComponent<enemydata>().hp);
                 }
             }
         }

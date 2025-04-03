@@ -1980,6 +1980,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1343155593}
   - component: {fileID: 1343155592}
+  - component: {fileID: 1343155596}
+  - component: {fileID: 1343155595}
+  - component: {fileID: 1343155594}
   m_Layer: 0
   m_Name: ObjectPoolManager
   m_TagString: Untagged
@@ -2000,6 +2003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 863509970761376514, guid: d04fd2d409d39174aa27c39011fd6845, type: 3}
+  poolSize: 30
 --- !u!4 &1343155593
 Transform:
   m_ObjectHideFlags: 0
@@ -2015,6 +2019,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1343155594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343155591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dfe9b7e265113e4cb9f456ffd358fdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characters: []
+--- !u!114 &1343155595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343155591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad31c3b6e216b704eae25c4d13c80e96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemies: []
+--- !u!114 &1343155596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343155591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65a9685024f5be94ba66f7d0d4a6f09b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterPrefab: {fileID: 5231930178312729434, guid: ad7a3811eb2edf14c80517b23e2479b7, type: 3}
+  poolSize: 30
 --- !u!1 &1362559686
 GameObject:
   m_ObjectHideFlags: 0

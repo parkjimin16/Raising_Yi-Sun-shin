@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPoolManager : MonoBehaviour
+public class EnemyPoolManager : MonoBehaviour
 {
-    public static ObjectPoolManager instance;
+    public static EnemyPoolManager instance;
 
-    public GameObject enemyPrefab;
-    private int poolSize = 30;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private int poolSize = 30;
 
     private Queue<GameObject> pool = new Queue<GameObject>();
 
@@ -34,6 +34,7 @@ public class ObjectPoolManager : MonoBehaviour
         {
             GameObject obj = pool.Dequeue();
             obj.SetActive(true);
+            EnemyManager.instance.RegisterEnemy(obj);
             return obj;
         }
         else
@@ -46,6 +47,7 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnToPool(GameObject obj)
     {
         obj.SetActive(false);
+        EnemyManager.instance.UnregisterEnemy(obj);
         pool.Enqueue(obj);
     }
 }

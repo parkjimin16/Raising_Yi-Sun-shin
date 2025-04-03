@@ -35,7 +35,7 @@ public class enemySpawn : MonoBehaviour
             float RandomX = Random.Range(-2.9f, 2.9f);
             Vector3 enemypos = new Vector3(RandomX, 6.6f, 1f);
 
-            GameObject go = ObjectPoolManager.instance.GetPooledEnemy();
+            GameObject go = EnemyPoolManager.instance.GetPooledEnemy();
             go.transform.position = enemypos;
 
             max += 1;

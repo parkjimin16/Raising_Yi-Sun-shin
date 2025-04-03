@@ -29,20 +29,6 @@ public class DataManager : MonoBehaviour
     public chbool chBool;
     public chData data = new chData();
 
-
-    /*private void Start()
-    {
-        var objs = FindObjectsOfType<DataManager>();
-        if (objs.Length == 1)
-        {
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        mg = mg.GetComponent<MergeItem>();
-    }*/
     private void Awake()
     {
         if (FindObjectsOfType<DataManager>().Length > 1)
